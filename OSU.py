@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 import requests
+import re
 from bs4 import BeautifulSoup
 
 #LET'S GO - Restarting then re- "pip install"ing worked! Now we should be good to start my testing
@@ -85,10 +86,11 @@ starting_point = soup.find("tr", string="Ohio State")
 title_row = starting_point.find_next_sibling("tr")
 current_row = title_row.find_next_sibling("tr")
 
+
 # Iterate through the rows until encountering <tr><td>Oklahoma</td></tr>
 while current_row:
     # Print the contents of current_row for debugging
-    print(current_row)
+    # print(current_row)
 
     # Check if the current row contains the ending point
     if current_row.find("td").text == "Oklahoma":
@@ -100,7 +102,7 @@ while current_row:
     Name_Href = current_row.find("a")["href"]
     Position = current_row.find_all("td")[2].text.strip()
     #finding the first and 2nd anchor tags, taking the href for the player, position of the third td tag
-    baseCollegeInfo.append({"Name": Name,"Name_Href": Name_Href, "Team": Team, "Position": Position})
+    baseCollegeInfo.append({"Name": Name,"Name_Href": Name_Href, "Team": Team, "Position": Position, "Stats": ""})
 
     #move to the next row: 
     current_row = current_row.find_next_sibling("tr")
@@ -108,17 +110,12 @@ while current_row:
     # Print a message indicating that we're moving to the next row
     print("Moving to next row...")
 
-
-
-# Display the extracted data
-for row in baseCollegeInfo:
-    print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"])
-
 #THAT WORKS - now we need to do the hard part; Use the href to get their stats! Going to do this for the NBA too rq
 #Doing NFL first!
 
 titles = []
 stats = []
+#Going to update and get rid of these. Just going to manually write down the titles sadly. 
 
 #BIIIIG Problem. This isn't working. Idk if it's too much to go through, but it's not working. I should/can find a better way to streamline this as well. 
 #So, I want to gather all of the titles for stats of players (i.e. Total Tackles, Kicks Blocked, Receptions, etc.) in order for it to be better or easier?
@@ -133,6 +130,18 @@ stats = []
 #I'm tired/unmotivated rn, but work on this this weekend/later/Monday/Tuesday. I'm not even sure where I want that check. Maybe on the intake of Position?
 #have a 1-6 PosNum added to the Dict? 1 for Defense, 2 for Receiver, 3 for HB, QB, Punter, Oline, which we can use that later in the foreach loop for printing!?
 
+defense = ["Cornerback", "Safety", "Defensive End", "Linebacker", "Defensive Tackle"]
+receiver = ["Tight End", "Wide Receiver"]
+oline = ["Offensive Tackle", "Guard", "Center", "Long Snapper"]
+
+def is_numeric(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+#Getting stats
 for link in baseCollegeInfo: 
     driver.get(link["Name_Href"])
     driver.implicitly_wait(10)
@@ -141,30 +150,128 @@ for link in baseCollegeInfo:
 
     #Pull stats. For every position that's NOT quarterback, I suppose we can just take their normal stats. For QBs, we want rushing stats too, so we'll need to figure out
     #a way to manipulate the link. (Adding /gamelog/ after "/nfl/player" to get their entire game stats)
-    if link["Position"] != "Quarterback": 
-        #continue with stats
-        starting_point = soup.find("tr", class_="Table__TR Table__even")
-        current_row = title_row.find_next("th")
-        while current_row: 
-            print(current_row)
-            titles.append(current_row.get("title"))
+    if link["Position"] in defense or link["Position"] in receiver or link["Position"] == "Running Back" or link["Position"] == "Punter": 
+        #print("Get stats like normal!")
+        # Find the starting point by searching for the first <td> with a numerical value
+        #Fancy way of finding all numbers. .isDigit ignored decimal numbers like 0.5 sacks, so we had to adjust. 
+        starting_point = soup.find("td", string=lambda string: string and is_numeric(string.strip())) 
+        #Seems like the class name is that for all (don't know how I had it anything different below), BUT, that's the class name for EVERY table row. So how do I differentiate them?
+        #hmm, so even if/when I can get all of the stats, where tf do I put them. They're uneven (Punters and RBs have 12 stats listed, Defensive Players 16, Receivers with 14). 
+        #I guess I could append them to their baseCollegeInfo dictionary? Not sure how that'd work with so many values coming in. 
 
-            # Move to the next row
-            next_row = current_row.find_next_sibling("th")
+        if starting_point:
+            starting_point = starting_point.find_parent("tr")
+        # Now, starting_point should be the table row containing the stats
+        if starting_point:
+            # Initialize an empty string to store the concatenated numbers
+            stats_string = ""
 
-            if next_row and next_row.parent.name != 'thead':
-                break
+            # Iterate over each <td> element in the found row
+            # Iterate over each <td> element in the found row
+        for td in starting_point.find_all("td"):
+            # Check if the content of the <td> element represents a numeric value
+            if td.text.strip().replace(".", "", 1).isdigit():
+                # If the content can be converted to a float without loss of precision,
+                # convert it to a float and then back to string to remove trailing zeros
+                float_value = float(td.text.strip())
+                if float_value.is_integer():
+                    stats_string += str(int(float_value)) + " "
+                else:
+                    stats_string += str(float_value) + " "
 
+        # Add the concatenated stats string to the dictionary under the key "Stats"
+        link["Stats"] = stats_string.strip()  # Remove trailing space
+        
+        #Stopping 3:37 on 2/17. The numbers for all of these players (Def, rec, rb, punter) ARE ALL THERE! Now I just need to figure out the stats for the others (QB, Oline)
+        #And then format all of this as a print statement! Might work on that before I worry about QB and Oline. 
+
+
+
+    #So, Defense, Receiver, Running Back, Punter we can just take the stats as is (use same formula) - keep in mind they have diff number of stats. Punter & HB 12, Def 16, Rec 14.
+    #Can't use that type of formula, but just take the stats for the ROW after it says "Regular Season"? Or maybe just the first row period. 
+
+    elif link["Position"] in oline: 
+        print("No Stats - oline!")
     else: 
-        #manipulation time   
-        break
-
-
+        #Quarterback, shenanigans time
+        print("Cry")
     print(link["Name_Href"])
-    print(titles)
+    print(link["Stats"])
 
 #Close the browser
 driver.quit()
+
+def organizeStats(nums, pos): 
+    if pos in defense: 
+        #Now it's time to turn these numbers into actual meanings. 
+        #Stats are: Total Tackles, Solo Tackles, Assist Tackles, Sacks, Forced Fumbles, Fumbles Recovered, Fumbles Recovered Yards, Interceptions, Interception Yards, 
+        #Longest Interception Return, Passes Defensed, Stuffs, Stuff Yards, Kicks Blocked
+        #FOR NOW - just return everything. Maybe later, crack down on what's returned. i.e. 0 forced fumbles, don't care so don't send
+        labels = [
+            "Total Tackles", "Solo Tackles", "Assist Tackles", "Sacks", 
+            "Forced Fumbles", "Fumbles Recovered", "Fumble Recovered Yards", 
+            "Interceptions", "Interception Yards", "Longest Interception Return", 
+            "Passes Defensed", "Stuffs", "Stuff Yards", "Kicks Blocked"
+        ]
+        
+        #Getting some errors in the values. Not sure if it's in the returning here or the actual stats. Like Bosa did NOT have 13.5 blocked kicks LOL. It's getting two more 0's
+        #Than it should be. Moving everything back 2. 
+        #Looks like it's the labels. The data is getting 13.5 Stuffs, 21 Stuff Yards and 0 Kicks Blocked for Bosa. It's just in the translation it's broken. 
+        
+        num_values = nums.split()
+        print(num_values)
+        stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
+        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
+
+        # Join the sentences together with commas and 'and' for the last one
+        formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
+
+        return(formatted_sentence)
+    elif pos in receiver: 
+        #Stats: Receptions, Receiving Targets, Receiving Yards, Yards per Reception, Receiving Touchdowns, Longest Reception, Receiving First Downs, Rushing Attempts, 
+        #Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush, Fumbles, Fumbles Lost
+        return(nums)
+    elif pos in oline: 
+        #Stats: No clue LOL - PFF or something?
+        return(nums)
+    elif pos == "Running Back": 
+        #Stats: Rushing Attempts, Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush, Receptions, Receiving Yards, Longest Reception, Fumbles, Fumbles Lost
+        return(nums)
+    elif pos == "Punter": 
+        #Stats: Punts, Gross Average Punt Yards, Longest Punt, Total Punt Yards, Touchbacks, Touchback Percentage, Punts Inside the 20, Punts Inside the 20 Percentage, 
+        #Punt Returns, Punt Return Yards, Average Punt Return Yards, Net average Punt Yards
+        return(nums)
+    elif pos == "Quarterback": 
+        #Should be QB
+        #Stats: Completions, Passing Attempts, Passing Yards, Completion Percentage, Yards per Pass Attempt, Passing Touchdowns, Interceptions, Longest Pass, Total Sacks, 
+        #Passer Rating, Adjusted QBR, Rushing Attempts, Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush
+        return(nums)
+    else: 
+        #Error handling here?
+        return("Cry")
+    return "Complete"
+
+# Display the extracted data
+for row in baseCollegeInfo:
+    if row["Position"] in defense: 
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
+    elif row["Position"] in receiver: 
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + row["Stats"])
+    elif row["Position"] in oline: 
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"])
+    elif row["Position"] == "Running Back": 
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + row["Stats"])
+    elif row["Position"] == "Punter": 
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + row["Stats"])
+    else: 
+        #Should be QB
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"])
+
+
+
+
+
+
 
 #ChatGPT has it closing the browser right after the "html = driver.page_source" line.
 #And before the soup = BeautifulSoup(html, "html.parser")

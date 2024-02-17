@@ -17,4 +17,9 @@ OOO - have it export as a .txt file! I was thinking of ways to make it readable 
 
 Use One Piece code as a base, then figure out the rest myself. Basketballreference and other sites might be the best, or maybe just a simple NFL.com and such? Maybe try to look for patterns in the hyperlinks to look up instead of emulating clicking and entering in "Search". Ik NFL and MLB (in particular) have basic stats up front and center, which is pretty nice. Altho MLB is from the app ig
 
- 
+ Make dictionaries for each position group (defense, reciever, etc.) is best. Makes it easy to concat the strings and keeps it consistent. 
+ I can even have the dict value names be the titles? i.e. TOT for Total Tackles, TRG for targets, etc. 
+ Also see if Python has a console.log? instead of printing
+ If baseCollegeInfo["Position"] in (dictionary for Defensive names)
+
+
