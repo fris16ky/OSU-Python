@@ -136,7 +136,7 @@ oline = ["Offensive Tackle", "Guard", "Center", "Long Snapper"]
 
 def is_numeric(s):
     try:
-        float(s)
+        float(s.replace(",", ""))
         return True
     except ValueError:
         return False
@@ -162,22 +162,23 @@ for link in baseCollegeInfo:
         if starting_point:
             starting_point = starting_point.find_parent("tr")
         # Now, starting_point should be the table row containing the stats
-        if starting_point:
-            # Initialize an empty string to store the concatenated numbers
-            stats_string = ""
+        # Initialize an empty string to store the concatenated numbers
+        stats_string = ""
 
             # Iterate over each <td> element in the found row
             # Iterate over each <td> element in the found row
-        for td in starting_point.find_all("td"):
-            # Check if the content of the <td> element represents a numeric value
-            if td.text.strip().replace(".", "", 1).isdigit():
-                # If the content can be converted to a float without loss of precision,
-                # convert it to a float and then back to string to remove trailing zeros
-                float_value = float(td.text.strip())
-                if float_value.is_integer():
-                    stats_string += str(int(float_value)) + " "
-                else:
-                    stats_string += str(float_value) + " "
+        # Check if the starting point is found
+        if starting_point:
+            for td in starting_point.find_all("td"):
+                # Check if the content of the <td> element represents a numeric value
+                if td.text.strip().replace(",", "").replace(".", "", 1).isdigit():
+                    # If the content can be converted to a float without loss of precision,
+                    # convert it to a float and then back to string to remove trailing zeros
+                    float_value = float(td.text.strip().replace(",", ""))
+                    if float_value.is_integer():
+                        stats_string += str(int(float_value)) + " "
+                    else:
+                        stats_string += str(float_value) + " "
 
         # Add the concatenated stats string to the dictionary under the key "Stats"
         link["Stats"] = stats_string.strip()  # Remove trailing space
@@ -192,8 +193,34 @@ for link in baseCollegeInfo:
 
     elif link["Position"] in oline: 
         print("No Stats - oline!")
+    elif link["Position"] == "Quarterback": 
+        driver.get("https://www.espn.com/nfl/player/gamelog/_/id/4362887/justin-fields")
+        driver.implicitly_wait(10)
+        html = driver.page_source
+        soup = BeautifulSoup(html, "html.parser")
+        
+        # Find the starting point by searching for the "Regular Season Stats" text within a <td> element
+        starting_point = soup.find("td", string="Regular Season Stats")
+
+        # Find the sibling <td> elements containing the statistics
+        if starting_point:
+            stats_tds = starting_point.find_next_siblings("td")
+            if stats_tds:
+                stats_string = ""
+                for td in stats_tds:
+                    # Check if the content of the <td> element represents a numeric value
+                    if td.text.strip().replace(",", "").replace(".", "", 1).isdigit():
+                        # If the content can be converted to a float without loss of precision,
+                        # convert it to a float and then back to string to remove trailing zeros
+                        float_value = float(td.text.strip().replace(",", ""))
+                        if float_value.is_integer():
+                            stats_string += str(int(float_value)) + " "
+                        else:
+                            stats_string += str(float_value) + " "
+                # Add the concatenated stats string to the dictionary under the key "Stats"
+                link["Stats"] = stats_string.strip()  # Remove trailing space
+
     else: 
-        #Quarterback, shenanigans time
         print("Cry")
     print(link["Name_Href"])
     print(link["Stats"])
@@ -204,68 +231,123 @@ driver.quit()
 def organizeStats(nums, pos): 
     if pos in defense: 
         #Now it's time to turn these numbers into actual meanings. 
-        #Stats are: Total Tackles, Solo Tackles, Assist Tackles, Sacks, Forced Fumbles, Fumbles Recovered, Fumbles Recovered Yards, Interceptions, Interception Yards, 
-        #Longest Interception Return, Passes Defensed, Stuffs, Stuff Yards, Kicks Blocked
         #FOR NOW - just return everything. Maybe later, crack down on what's returned. i.e. 0 forced fumbles, don't care so don't send
         labels = [
             "Total Tackles", "Solo Tackles", "Assist Tackles", "Sacks", 
             "Forced Fumbles", "Fumbles Recovered", "Fumble Recovered Yards", 
-            "Interceptions", "Interception Yards", "Longest Interception Return", 
-            "Passes Defensed", "Stuffs", "Stuff Yards", "Kicks Blocked"
+            "Interceptions", "Interception Yards", "Average Interception Return Yards", 
+            "Touchdowns", "Yards - Longest Interception Return", "Passes Defensed", 
+            "Stuffs", "Stuff Yards", "Kicks Blocked!"
         ]
         
-        #Getting some errors in the values. Not sure if it's in the returning here or the actual stats. Like Bosa did NOT have 13.5 blocked kicks LOL. It's getting two more 0's
-        #Than it should be. Moving everything back 2. 
-        #Looks like it's the labels. The data is getting 13.5 Stuffs, 21 Stuff Yards and 0 Kicks Blocked for Bosa. It's just in the translation it's broken. 
-        
-        num_values = nums.split()
-        print(num_values)
+        num_values = nums.split() #Split up the numbers string into individual stats
+        #print(num_values) #logging
         stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
         #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
 
         # Join the sentences together with commas and 'and' for the last one
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
-
         return(formatted_sentence)
     elif pos in receiver: 
         #Stats: Receptions, Receiving Targets, Receiving Yards, Yards per Reception, Receiving Touchdowns, Longest Reception, Receiving First Downs, Rushing Attempts, 
         #Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush, Fumbles, Fumbles Lost
-        return(nums)
+        
+        labels = [
+            "Receptions", "Receiving Targets", "Receiving Yards", "Yards Per Reception", 
+            "Receiving Touchdowns", "Yards - Longest Reception", "Receiving First Downs", 
+            "Rushing Attempts", "Rushing Yards", "Yards per Rush Attempt", 
+            "Rushing Touchdowns", "Yards - Longest Rush", "Fumbles", "Fumbles Lost!"
+        ]
+        
+        num_values = nums.split() #Split up the numbers string into individual stats
+        #print(num_values) #logging
+        stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
+        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
+
+        # Join the sentences together with commas and 'and' for the last one
+        formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
+        return(formatted_sentence)
     elif pos in oline: 
         #Stats: No clue LOL - PFF or something?
+        #Jake McQuaide and Liam McCullough (starting Long Snappers) have 0 stats for Long Snappers - so can't do anything about them. 
+        #Not sure how to do PFF either - they have the stupid ID thing. it's not just pff.com/nfl/players/taylor-decker, there's a /10650 after. 
+        #I suppose I could take the first link after googling "Taylor Decker pff", then click it, then take the Offense Snaps Played, Penalties, Sacks Allowed, and Overall Grade?
+        #But that's a ton of work to not do anything
         return(nums)
     elif pos == "Running Back": 
         #Stats: Rushing Attempts, Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush, Receptions, Receiving Yards, Longest Reception, Fumbles, Fumbles Lost
-        return(nums)
+        
+        labels = [
+            "Rushing Attempts", "Rushing Yards", "Yards Per Rush Attempt", "Rushing Touchdowns", 
+            "Yards - Longest Rush", "Receptions", "Receiving Yards", "Yards Per Reception", 
+            "Receiving Touchdowns", "Yards - Longest Reception", "Fumbles", "Fumbles Lost!"
+        ]
+        
+        num_values = nums.split() #Split up the numbers string into individual stats
+        #print(num_values) #logging
+        stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
+        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
+
+        # Join the sentences together with commas and 'and' for the last one
+        formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
+        return(formatted_sentence)
     elif pos == "Punter": 
         #Stats: Punts, Gross Average Punt Yards, Longest Punt, Total Punt Yards, Touchbacks, Touchback Percentage, Punts Inside the 20, Punts Inside the 20 Percentage, 
         #Punt Returns, Punt Return Yards, Average Punt Return Yards, Net average Punt Yards
-        return(nums)
+                
+        labels = [
+            "Punts", "Gross Average Punt Yards", "Yards - Longest Punt", "Total Punt Yards", 
+            "Touchbacks", "Touchback Percentage", "Punts Inside the 20", "Punts Inside the 20 Percentage",
+            "Punt Returns Allowed", "Punt Return Yards", "Average Punt Return Yards", "Net Average Punt Yards"
+        ]
+        
+        num_values = nums.split() #Split up the numbers string into individual stats
+        #print(num_values) #logging
+        stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
+        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
+
+        # Join the sentences together with commas and 'and' for the last one
+        formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
+        return(formatted_sentence)
     elif pos == "Quarterback": 
         #Should be QB
         #Stats: Completions, Passing Attempts, Passing Yards, Completion Percentage, Yards per Pass Attempt, Passing Touchdowns, Interceptions, Longest Pass, Total Sacks, 
         #Passer Rating, Adjusted QBR, Rushing Attempts, Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush
-        return(nums)
+        
+        labels = [
+            "Completions", "Passing Attempts", "Passing Yards", "Completion Percentage", 
+            "Yards Per Pass Attempt", "Passing Touchdowns", "Interceptions", "Yards - Longest Pass", 
+            "Times Sacked", "Passer Rating", "Adjusted QBR", "Rushing Attempts", "Rushing Yards",
+            "Yards Per Rush Attempt", "Rushing Touchdowns", "Yards - Longest Rush!"
+        ]
+        
+        num_values = nums.split() #Split up the numbers string into individual stats
+        #print(num_values) #logging
+        stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
+        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
+
+        # Join the sentences together with commas and 'and' for the last one
+        formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
+        return(formatted_sentence)
     else: 
         #Error handling here?
         return("Cry")
-    return "Complete"
 
 # Display the extracted data
 for row in baseCollegeInfo:
     if row["Position"] in defense: 
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] in receiver: 
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + row["Stats"])
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] in oline: 
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"])
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + "! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!\nWe know they were GOATED this year tho!")
     elif row["Position"] == "Running Back": 
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + row["Stats"])
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] == "Punter": 
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + row["Stats"])
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     else: 
         #Should be QB
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"])
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
 
 
 
