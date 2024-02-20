@@ -194,7 +194,13 @@ for link in baseCollegeInfo:
     elif link["Position"] in oline: 
         print("No Stats - oline!")
     elif link["Position"] == "Quarterback": 
-        driver.get("https://www.espn.com/nfl/player/gamelog/_/id/4362887/justin-fields")
+        #In order to get rushing stats for QBs (+ a few more passing stats), we need to view their full stats, which is at a new/different link. 
+        #The difference for this link is that it includes /gamelog/ right after /player, so we need to replace/insert it!
+        string_to_insert = "gamelog/"
+        insert_index = link["Name_Href"].find("/player/") + len("/player/")
+        new_link = link["Name_Href"][:insert_index] + string_to_insert + link["Name_Href"][insert_index:]
+        print(new_link)
+        driver.get(new_link)
         driver.implicitly_wait(10)
         html = driver.page_source
         soup = BeautifulSoup(html, "html.parser")
