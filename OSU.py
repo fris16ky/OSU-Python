@@ -3,7 +3,8 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-#LET'S GO - Restarting then re- "pip install"ing worked! Now we should be good to start my testing
+#For now, seems like I can't do the NBA without hardcoding it. There's no rhyme or reason to the stats shown on the page I was looking at, and I can't search them up on Google or ESPN
+#Since there's unique IDs. So, might try to figure out a way to work with this current website, or just clean up this code and only do NFL. OR just hardcode it for NBA and keep that separate
 
 #This personal project is my SECOND attempt at Web Scraping
 #The idea is to parse through various websites (mainly ESPN) to gather statistical information on all Ohio State Buckeyes
@@ -30,7 +31,6 @@ espnProInfo = [] #info from the hyperlinks in the espn college site
 playerLinks = [] #stores the hyperlinks to visit each players espn stats page
 
 #Starting the Web Scrape process
-
 #Create a new instance of the Chrome driver
 driver = webdriver.Chrome()
 #Navigate to my MyAnimeList page
@@ -41,51 +41,14 @@ driver.implicitly_wait(10)
 #Get the page source/all of it's code
 html = driver.page_source
 
-#Code to get the episode count of the One Piece main show
-#^obv change
 soup = BeautifulSoup(html, "html.parser")
-#Find the tag that contains the progress/episodes watched (anything that contains the words "One Piece")
-# findProgress = soup.find("td", string=lambda text: "Ohio State" in str(text))
-#Not sure if that works ^ Can I do While (same as above) != Oklahoma? 
-#or will that instantly stop since it CAN find Oklahoma. I think I'll need soup.next() or something idk. 
-
-#So, the way it is in the college site, first hyperlink (a) after "Ohio State" is a player (Eli Apple). 
-#NEXT Hyperlink is the team - so we don't want the href of the team, but we do want the string of the team
-#Then, next value is a <td> (They're all Tds, but this one is only a td) - contains the Position
-#Will this have to be a 3d array or ... idk what they're called. Heap stack or something? But where I can have an array
-#but each value in the array has multiple items? Like store "Player1" Player1.Name = "Eli Apple"; Player1.Team = "Miami Dolphins", Player1.Position = "Cornerback"
-
-#IT'S A DICTIONARY: array = []
-#player1 = {"Name": "Eli Apple", "Team": "Miami Dolphins", "Position", "Cornerback"}
-#array.append(player1)
-
-#Example code from ChatGPT: 
-# def create_player(name, team, position):
-#     return {"Name": name, "Team": team, "Position": position}
-
-# # Assuming you have scraped data and stored it in some variables
-# # Example data for three players
-# player_data = [
-#     {"name": "Eli Apple", "team": "Miami Dolphins", "position": "Cornerback"},
-#     {"name": "Player2", "team": "Team2", "position": "Position2"},
-#     {"name": "Player3", "team": "Team3", "position": "Position3"}
-# ]
-
-# Loop through the scraped player data and add it to ArraySports
-# for player in player_data:
-#     player_dict = create_player(player["name"], player["team"], player["position"])
-#     ArraySports.append(player_dict)
-
-
-#For getting the data between Ohio State and Oklahoma, Gpt has this: 
-
+#For getting the data between Ohio State and Oklahoma: 
 # Find the starting point <tr><td>Ohio State</td></tr>
 starting_point = soup.find("tr", string="Ohio State")
 
 # Start iterating from the next row after the starting point
 title_row = starting_point.find_next_sibling("tr")
 current_row = title_row.find_next_sibling("tr")
-
 
 # Iterate through the rows until encountering <tr><td>Oklahoma</td></tr>
 while current_row:
@@ -110,30 +73,12 @@ while current_row:
     # Print a message indicating that we're moving to the next row
     print("Moving to next row...")
 
-#THAT WORKS - now we need to do the hard part; Use the href to get their stats! Going to do this for the NBA too rq
-#Doing NFL first!
-
-titles = []
-stats = []
-#Going to update and get rid of these. Just going to manually write down the titles sadly. 
-
-#BIIIIG Problem. This isn't working. Idk if it's too much to go through, but it's not working. I should/can find a better way to streamline this as well. 
-#So, I want to gather all of the titles for stats of players (i.e. Total Tackles, Kicks Blocked, Receptions, etc.) in order for it to be better or easier?
-#So, CB, S, De, Dt, Lb all have the same stat titles. So do WR and TE. HB, QB, Punter have different stat titles. 
-#Oline and Long Snapper have no stats whatsoever - look up PFF grade?
-#Not really sure what to do ngl. This is pretty hard to both get the stats names and the stat values. I suppose I can cheat it. 
-#Maybe during the intake (populating of baseCollegeInfo), if they have a defensive position (Listed on website as "Cornerback, Safety, Defensive End, Linebacker, Defensive Tackle")
-#have a format for their stats? Like just worry about taking the values, and have different If conditions for printing.
-
-#I.e. if it's a defensive player, the first stat is Total Tackles. Then Solo Tackles, then Assist Tackles. So, 46, 37, 9 will be turned into: 
-#"Eli Apple has had 46 Total Tackles, 37 Solo Tackles, and 9 Assist Tackles"... for all stats. And if it's a WR/TE, have the format up as well (first rec, then targets, etc.)
-#I'm tired/unmotivated rn, but work on this this weekend/later/Monday/Tuesday. I'm not even sure where I want that check. Maybe on the intake of Position?
-#have a 1-6 PosNum added to the Dict? 1 for Defense, 2 for Receiver, 3 for HB, QB, Punter, Oline, which we can use that later in the foreach loop for printing!?
-
+#Defaulting titles for each position group that has the same exact ESPN stats, for sorting/deciphering later
 defense = ["Cornerback", "Safety", "Defensive End", "Linebacker", "Defensive Tackle"]
 receiver = ["Tight End", "Wide Receiver"]
 oline = ["Offensive Tackle", "Guard", "Center", "Long Snapper"]
 
+#Function to determine if a value is a number (float, int, or number with a comma)
 def is_numeric(s):
     try:
         float(s.replace(",", ""))
@@ -148,26 +93,17 @@ for link in baseCollegeInfo:
     html = driver.page_source
     soup = BeautifulSoup(html, "html.parser")
 
-    #Pull stats. For every position that's NOT quarterback, I suppose we can just take their normal stats. For QBs, we want rushing stats too, so we'll need to figure out
-    #a way to manipulate the link. (Adding /gamelog/ after "/nfl/player" to get their entire game stats)
     if link["Position"] in defense or link["Position"] in receiver or link["Position"] == "Running Back" or link["Position"] == "Punter": 
         #print("Get stats like normal!")
         # Find the starting point by searching for the first <td> with a numerical value
-        #Fancy way of finding all numbers. .isDigit ignored decimal numbers like 0.5 sacks, so we had to adjust. 
         starting_point = soup.find("td", string=lambda string: string and is_numeric(string.strip())) 
-        #Seems like the class name is that for all (don't know how I had it anything different below), BUT, that's the class name for EVERY table row. So how do I differentiate them?
-        #hmm, so even if/when I can get all of the stats, where tf do I put them. They're uneven (Punters and RBs have 12 stats listed, Defensive Players 16, Receivers with 14). 
-        #I guess I could append them to their baseCollegeInfo dictionary? Not sure how that'd work with so many values coming in. 
-
         if starting_point:
             starting_point = starting_point.find_parent("tr")
         # Now, starting_point should be the table row containing the stats
         # Initialize an empty string to store the concatenated numbers
         stats_string = ""
 
-            # Iterate over each <td> element in the found row
-            # Iterate over each <td> element in the found row
-        # Check if the starting point is found
+        # Iterate over each <td> element in the found row
         if starting_point:
             for td in starting_point.find_all("td"):
                 # Check if the content of the <td> element represents a numeric value
@@ -182,17 +118,8 @@ for link in baseCollegeInfo:
 
         # Add the concatenated stats string to the dictionary under the key "Stats"
         link["Stats"] = stats_string.strip()  # Remove trailing space
-        
-        #Stopping 3:37 on 2/17. The numbers for all of these players (Def, rec, rb, punter) ARE ALL THERE! Now I just need to figure out the stats for the others (QB, Oline)
-        #And then format all of this as a print statement! Might work on that before I worry about QB and Oline. 
-
-
-
-    #So, Defense, Receiver, Running Back, Punter we can just take the stats as is (use same formula) - keep in mind they have diff number of stats. Punter & HB 12, Def 16, Rec 14.
-    #Can't use that type of formula, but just take the stats for the ROW after it says "Regular Season"? Or maybe just the first row period. 
-
     elif link["Position"] in oline: 
-        print("No Stats - oline!")
+        print("No Stats - oline!") #sadge
     elif link["Position"] == "Quarterback": 
         #In order to get rushing stats for QBs (+ a few more passing stats), we need to view their full stats, which is at a new/different link. 
         #The difference for this link is that it includes /gamelog/ right after /player, so we need to replace/insert it!
@@ -207,7 +134,6 @@ for link in baseCollegeInfo:
         
         # Find the starting point by searching for the "Regular Season Stats" text within a <td> element
         starting_point = soup.find("td", string="Regular Season Stats")
-
         # Find the sibling <td> elements containing the statistics
         if starting_point:
             stats_tds = starting_point.find_next_siblings("td")
@@ -225,19 +151,20 @@ for link in baseCollegeInfo:
                             stats_string += str(float_value) + " "
                 # Add the concatenated stats string to the dictionary under the key "Stats"
                 link["Stats"] = stats_string.strip()  # Remove trailing space
-
     else: 
+        #There shouldn't be any other position name possible, but in case, handle that
         print("Cry")
+    #Printing out the link + the stat values as numbers for logging
     print(link["Name_Href"])
     print(link["Stats"])
 
 #Close the browser
 driver.quit()
 
+#Organize the stats for our current printing process + later formatted in a Text file
 def organizeStats(nums, pos): 
     if pos in defense: 
-        #Now it's time to turn these numbers into actual meanings. 
-        #FOR NOW - just return everything. Maybe later, crack down on what's returned. i.e. 0 forced fumbles, don't care so don't send
+        #Labels for each stat listed in numerical value in the dictionary
         labels = [
             "Total Tackles", "Solo Tackles", "Assist Tackles", "Sacks", 
             "Forced Fumbles", "Fumbles Recovered", "Fumble Recovered Yards", 
@@ -255,9 +182,6 @@ def organizeStats(nums, pos):
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
         return(formatted_sentence)
     elif pos in receiver: 
-        #Stats: Receptions, Receiving Targets, Receiving Yards, Yards per Reception, Receiving Touchdowns, Longest Reception, Receiving First Downs, Rushing Attempts, 
-        #Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush, Fumbles, Fumbles Lost
-        
         labels = [
             "Receptions", "Receiving Targets", "Receiving Yards", "Yards Per Reception", 
             "Receiving Touchdowns", "Yards - Longest Reception", "Receiving First Downs", 
@@ -265,12 +189,9 @@ def organizeStats(nums, pos):
             "Rushing Touchdowns", "Yards - Longest Rush", "Fumbles", "Fumbles Lost!"
         ]
         
-        num_values = nums.split() #Split up the numbers string into individual stats
+        num_values = nums.split() 
         #print(num_values) #logging
         stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
-        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
-
-        # Join the sentences together with commas and 'and' for the last one
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
         return(formatted_sentence)
     elif pos in oline: 
@@ -281,45 +202,30 @@ def organizeStats(nums, pos):
         #But that's a ton of work to not do anything
         return(nums)
     elif pos == "Running Back": 
-        #Stats: Rushing Attempts, Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush, Receptions, Receiving Yards, Longest Reception, Fumbles, Fumbles Lost
-        
         labels = [
             "Rushing Attempts", "Rushing Yards", "Yards Per Rush Attempt", "Rushing Touchdowns", 
             "Yards - Longest Rush", "Receptions", "Receiving Yards", "Yards Per Reception", 
             "Receiving Touchdowns", "Yards - Longest Reception", "Fumbles", "Fumbles Lost!"
         ]
         
-        num_values = nums.split() #Split up the numbers string into individual stats
+        num_values = nums.split()
         #print(num_values) #logging
         stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
-        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
-
-        # Join the sentences together with commas and 'and' for the last one
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
         return(formatted_sentence)
     elif pos == "Punter": 
-        #Stats: Punts, Gross Average Punt Yards, Longest Punt, Total Punt Yards, Touchbacks, Touchback Percentage, Punts Inside the 20, Punts Inside the 20 Percentage, 
-        #Punt Returns, Punt Return Yards, Average Punt Return Yards, Net average Punt Yards
-                
         labels = [
             "Punts", "Gross Average Punt Yards", "Yards - Longest Punt", "Total Punt Yards", 
             "Touchbacks", "Touchback Percentage", "Punts Inside the 20", "Punts Inside the 20 Percentage",
             "Punt Returns Allowed", "Punt Return Yards", "Average Punt Return Yards", "Net Average Punt Yards"
         ]
         
-        num_values = nums.split() #Split up the numbers string into individual stats
+        num_values = nums.split()
         #print(num_values) #logging
         stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
-        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
-
-        # Join the sentences together with commas and 'and' for the last one
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
         return(formatted_sentence)
     elif pos == "Quarterback": 
-        #Should be QB
-        #Stats: Completions, Passing Attempts, Passing Yards, Completion Percentage, Yards per Pass Attempt, Passing Touchdowns, Interceptions, Longest Pass, Total Sacks, 
-        #Passer Rating, Adjusted QBR, Rushing Attempts, Rushing Yards, Yards per Rush Attempt, Rushing Touchdowns, Longest Rush
-        
         labels = [
             "Completions", "Passing Attempts", "Passing Yards", "Completion Percentage", 
             "Yards Per Pass Attempt", "Passing Touchdowns", "Interceptions", "Yards - Longest Pass", 
@@ -327,19 +233,16 @@ def organizeStats(nums, pos):
             "Yards Per Rush Attempt", "Rushing Touchdowns", "Yards - Longest Rush!"
         ]
         
-        num_values = nums.split() #Split up the numbers string into individual stats
+        num_values = nums.split() 
         #print(num_values) #logging
         stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
-        #This iterates over pairs of values in both and lines them up using zip. i.e. first 3 of num_values is 46, 37, 9. First 3 of labels is TOT, SOLO, AST, so it pairs those together
-
-        # Join the sentences together with commas and 'and' for the last one
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
         return(formatted_sentence)
     else: 
-        #Error handling here?
-        return("Cry")
+        #Same as before; this shouldn't ever execute, but just in case
+        return("Cry v2")
 
-# Display the extracted data
+#Print the extracted data
 for row in baseCollegeInfo:
     if row["Position"] in defense: 
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
@@ -351,73 +254,7 @@ for row in baseCollegeInfo:
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] == "Punter": 
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
-    else: 
-        #Should be QB
+    elif row["Position"] == "Quarterback": 
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
-
-
-
-
-
-
-
-#ChatGPT has it closing the browser right after the "html = driver.page_source" line.
-#And before the soup = BeautifulSoup(html, "html.parser")
-#Regarding driver.quit(), its placement after the soup code is generally fine. Since you're fetching the entire page source with driver.page_source before quitting the driver, it ensures that you have all the 
-#necessary HTML content before parsing it with BeautifulSoup. This sequence should work without issues. It's common practice to close the Selenium webdriver after you're done using it to free up system resources. So, placing driver.quit() at the end is recommended.
-
-#Parsing through each movie link to get its duration
-# for link in movie_links: 
-#     url = link
-#     response = requests.get(url)
-#     html_content = response.content
-#     soup = BeautifulSoup(html_content, "html.parser")
-#     #Find the tag that contains the duration; the span before the duration has a text of "Duration:"
-#     duration_tag = soup.find("span", string="Duration:")
-#     #Extract the duration (in hours/minutes) from the next sibling tag
-#     duration = duration_tag.next_sibling.strip()
-#     #Add the duration to the movie_durations array
-#     movie_durations.append(duration)
-
-#Printing the show/movie names
-# print() #Extra line before to separate from coding glob
-# print("You have watched", episode_count, "episodes of One Piece! You have also watched the following films: ")
-# #Special code to print the elements of the array (movie names) all in one line
-# for i in range (len(movie_names)): 
-#     if i == len(movie_names) - 1: 
-#         #If we're at the last element, we don't need a comma
-#         print("and", movie_names[i])
-#     else: 
-#         #Put a comma in between each movie/film
-#         print(movie_names[i], end=", ")
-
-#Converting the movie durations array into the totalled minutes
-# def convert_time(array): 
-#     #Given an array of strings in the format: xx min. or xx hr. xx min.
-#     total_minutes = 0
-#     for time in array: 
-#         #Splitting the elements up by spaces
-#         parts = time.split(' ')
-#         movie_minutes = 0 #number of minutes for each movie
-#         for i, part in enumerate(parts): 
-#             if part.isdigit(): 
-#                 if i < len(parts) - 1 and parts[i+1] == 'min.': 
-#                     #If we're not at the end and we're looking at minutes, add them to the current movie_minutes
-#                     movie_minutes += int(part)
-#                 elif i < len(parts) - 1 and parts[i+1] == 'hr.': 
-#                     #If we're not at the end and we're looking at the hours, multiply by 60 then add to the current movie_minutes
-#                     movie_minutes += int(part) * 60
-#                 else: 
-#                     movie_minutes += int(part)
-#         total_minutes += movie_minutes
-#     #For the One Piece main series (non-movie), we need to multiply it's general duration by how many episodes I've watched
-#     #Including intro and outro, the average/general duration is 24 minutes per episode
-#     total_minutes += (int(episode_count) - 1) * 24
-#     total_hours = total_minutes / 60
-
-#     print() #For a new line
-#     print("You have spent", '{:,.0f}'.format(total_minutes), "minutes watching One Piece, which is also equal to", round(total_hours, 3), "hours, or", round(total_hours/24, 3), "days!")
-#     #Special formatting to make 10000 go to 10,000, and rounding for clean numbers
-# convert_time(movie_durations)
-# print() #Line after for a cleaner viewing and reading
-# #Currently (8 Movies, 939 Episodes) this will print 23,178 minutes or 386.3 Hours or 16.096 Days
+    else: 
+        print("Cry but v3")
