@@ -1,0 +1,181 @@
+Eli Apple is a Cornerback for the Miami Dolphins.
+This year, he recorded 46 Total Tackles, 37 Solo Tackles, 9 Assist Tackles, 0.5 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 1 Interceptions, 8 Interception Yards, 8 Average Interception Return Yards, 0 Touchdowns, 8 Yards - Longest Interception Return, 9 Passes Defensed, 1.5 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Vonn Bell is a Safety for the Carolina Panthers.
+This year, he recorded 69 Total Tackles, 42 Solo Tackles, 27 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 1 Interceptions, 11 Interception Yards, 11 Average Interception Return Yards, 0 Touchdowns, 11 Yards - Longest Interception Return, 2 Passes Defensed, 0.5 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Joey Bosa is a Linebacker for the Los Angeles Chargers.
+This year, he recorded 20 Total Tackles, 14 Solo Tackles, 6 Assist Tackles, 6.5 Sacks, 1 Forced Fumbles, 1 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 1 Passes Defensed, 1.5 Stuffs, 1 Stuff Yards, and 0 Kicks Blocked!
+
+Nick Bosa is a Defensive End for the San Francisco 49ers.
+This year, he recorded 53 Total Tackles, 34 Solo Tackles, 19 Assist Tackles, 10.5 Sacks, 2 Forced Fumbles, 1 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 4 Passes Defensed, 13.5 Stuffs, 21 Stuff Yards, and 0 Kicks Blocked!
+
+Noah Brown is a Wide Receiver for the Houston Texans.
+This year, he recorded 33 Receptions, 55 Receiving Targets, 567 Receiving Yards, 17.2 Yards Per Reception, 2 Receiving Touchdowns, 75 Yards - Longest Reception, 24 Receiving First Downs, 1 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, and 0 Rushing Touchdowns
+
+Baron Browning is a Linebacker for the Denver Broncos.
+This year, he recorded 25 Total Tackles, 19 Solo Tackles, 6 Assist Tackles, 4.5 Sacks, 2 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 2 Passes Defensed, 3 Stuffs, 2 Stuff Yards, and 0 Kicks Blocked!
+
+Parris Campbell is a Wide Receiver for the New York Giants.
+This year, he recorded 20 Receptions, 27 Receiving Targets, 104 Receiving Yards, 5.2 Yards Per Reception, 0 Receiving Touchdowns, 17 Yards - Longest Reception, 2 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Jonathon Cooper is a Linebacker for the Denver Broncos.
+This year, he recorded 72 Total Tackles, 44 Solo Tackles, 28 Assist Tackles, 8.5 Sacks, 1 Forced Fumbles, 2 Fumbles Recovered, 35 Fumble Recovered Yards, 1 Interceptions, 4 Interception Yards, 4 Average Interception Return Yards, 0 Touchdowns, 4 Yards - Longest Interception Return, 2 Passes Defensed, 5 Stuffs, 2 Stuff Yards, and 0 Kicks Blocked!
+
+Wyatt Davis is a Guard for the New York Giants! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Taylor Decker is a Offensive Tackle for the Detroit Lions! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+J.K. Dobbins is a Running Back for the Baltimore Ravens.
+This year, he recorded 8 Rushing Attempts, 22 Rushing Yards, 2.8 Yards Per Rush Attempt, 1 Rushing Touchdowns, 4 Yards - Longest Rush, 2 Receptions, 15 Receiving Yards, 7.5 Yards Per Reception, 0 Receiving Touchdowns, 10 Yards - Longest Reception, 0 Fumbles, and 0 Fumbles Lost!
+
+Pat Elflein is a Guard for the Arizona Cardinals! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Ezekiel Elliott is a Running Back for the New England Patriots.
+This year, he recorded 184 Rushing Attempts, 642 Rushing Yards, 3.5 Yards Per Rush Attempt, 3 Rushing Touchdowns, 17 Yards - Longest Rush, 51 Receptions, 313 Receiving Yards, 6.1 Yards Per Reception, 2 Receiving Touchdowns, 23 Yards - Longest Reception, 2 Fumbles, and 1 Fumbles Lost!
+
+Luke Farrell is a Tight End for the Jacksonville Jaguars.
+This year, he recorded 13 Receptions, 15 Receiving Targets, 155 Receiving Yards, 11.9 Yards Per Reception, 0 Receiving Touchdowns, 42 Yards - Longest Reception, 5 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Justin Fields is a Quarterback for the Chicago Bears.
+This year, he recorded 227 Completions, 370 Passing Attempts, 2562 Passing Yards, 61.4 Completion Percentage, 6.9 Yards Per Pass Attempt, 16 Passing Touchdowns, 9 Interceptions, 58 Yards - Longest Pass, 44 Times Sacked, 86.3 Passer Rating, 46.1 Adjusted QBR, 124 Rushing Attempts, 657 Rushing Yards, 5.3 Yards Per Rush Attempt, 4 Rushing Touchdowns, and 39 Yards - Longest Rush!
+Jordan Fuller is a Safety for the Los Angeles Rams.
+This year, he recorded 94 Total Tackles, 61 Solo Tackles, 33 Assist Tackles, 0 Sacks, 3 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 3 Interceptions, 39 Interception Yards, 13 Average Interception Return Yards, 0 Touchdowns, 21 Yards - Longest Interception Return, 8 Passes Defensed, 2 Stuffs, 5 Stuff Yards, and 0 Kicks Blocked!
+
+DaVon Hamilton is a Defensive Tackle for the Jacksonville Jaguars.
+This year, he recorded 12 Total Tackles, 7 Solo Tackles, 5 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 1 Stuffs, 4 Stuff Yards, and 0 Kicks Blocked!
+
+Johnathan Hankins is a Defensive Tackle for the Dallas Cowboys.
+This year, he recorded 27 Total Tackles, 13 Solo Tackles, 14 Assist Tackles, 3 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 2 Passes Defensed, 3 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Malik Harrison is a Linebacker for the Baltimore Ravens.
+This year, he recorded 20 Total Tackles, 13 Solo Tackles, 7 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 1 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Zach Harrison is a Defensive End for the Atlanta Falcons.
+This year, he recorded 33 Total Tackles, 18 Solo Tackles, 15 Assist Tackles, 3 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 1 Passes Defensed, 6.5 Stuffs, 4 Stuff Yards, and 0 Kicks Blocked!
+
+Cameron Heyward is a Defensive Tackle for the Pittsburgh Steelers.
+This year, he recorded 33 Total Tackles, 25 Solo Tackles, 8 Assist Tackles, 2 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 1 Passes Defensed, 3.5 Stuffs, 12 Stuff Yards, and 0 Kicks Blocked!
+
+Ronnie Hickman is a Safety for the Cleveland Browns.
+This year, he recorded 25 Total Tackles, 17 Solo Tackles, 8 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 1 Interceptions, 30 Interception Yards, 30 Average Interception Return Yards, 1 Touchdowns, 30 Yards - Longest Interception Return, 3 Passes Defensed, 0 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Jalyn Holmes is a Defensive End for the New York Jets.
+This year, he recorded 5 Total Tackles, 3 Solo Tackles, 2 Assist Tackles, 1 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 0.5 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Malik Hooker is a Safety for the Dallas Cowboys.
+This year, he recorded 50 Total Tackles, 27 Solo Tackles, 23 Assist Tackles, 0 Sacks, 1 Forced Fumbles, 1 Fumbles Recovered, 0 Fumble Recovered Yards, 1 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 3 Passes Defensed, 4 Stuffs, 2 Stuff Yards, and 0 Kicks Blocked!
+
+Sam Hubbard is a Defensive End for the Cincinnati Bengals.
+This year, he recorded 58 Total Tackles, 38 Solo Tackles, 20 Assist Tackles, 6 Sacks, 0 Forced Fumbles, 2 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 5.5 Stuffs, 1 Stuff Yards, and 0 Kicks Blocked!
+
+Jonah Jackson is a Guard for the Los Angeles Rams! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Paris Johnson Jr. is a Offensive Tackle for the Arizona Cardinals! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Cameron Johnston is a Punter for the Pittsburgh Steelers.
+This year, he recorded 66 Punts, 47.7 Gross Average Punt Yards, 74 Yards - Longest Punt, 3145 Total Punt Yards, 3 Touchbacks, 4.55 Touchback Percentage, 30 Punts Inside the 20, 45.46 Punts Inside the 20 Percentage, 26 Punt Returns Allowed, 183 Punt Return Yards, 7 Average Punt Return Yards, and 44 Net Average Punt Yards
+
+Dre'Mont Jones is a Defensive End for the Seattle Seahawks.
+This year, he recorded 49 Total Tackles, 26 Solo Tackles, 23 Assist Tackles, 4.5 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 6 Stuffs, 6 Stuff Yards, and 0 Kicks Blocked!
+
+Dawand Jones is a Offensive Tackle for the Cleveland Browns! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Michael Jordan is a Guard for the New England Patriots! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Marshon Lattimore is a Cornerback for the New Orleans Saints.
+This year, he recorded 48 Total Tackles, 39 Solo Tackles, 9 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 1 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 8 Passes Defensed, 2.5 Stuffs, 2 Stuff Yards, and 0 Kicks Blocked!
+
+Tyquan Lewis is a Defensive End for the Indianapolis Colts.
+This year, he recorded 25 Total Tackles, 18 Solo Tackles, 7 Assist Tackles, 4 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 3 Passes Defensed, 10 Stuffs, 17 Stuff Yards, and 0 Kicks Blocked!
+
+Corey Linsley is a Center for the Los Angeles Chargers! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Austin Mack is a Wide Receiver for the Atlanta Falcons.
+This year, he recorded 7 Receptions, 11 Receiving Targets, 91 Receiving Yards, 13 Yards Per Reception, 0 Receiving Touchdowns, 50 Yards - Longest Reception, 5 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Tanner McCalister is a Safety for the Denver Broncos.
+This year, he recorded 2 Total Tackles, 1 Solo Tackles, 1 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 0 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Liam McCullough is a Long Snapper for the Atlanta Falcons! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Terry McLaurin is a Wide Receiver for the Washington Commanders.
+This year, he recorded 79 Receptions, 132 Receiving Targets, 1002 Receiving Yards, 12.7 Yards Per Reception, 4 Receiving Touchdowns, 48 Yards - Longest Reception, 47 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Raekwon McMillan is a Linebacker for the New England Patriots.
+This year, he recorded 35 Total Tackles, 26 Solo Tackles, 9 Assist Tackles, 1 Sacks, 0 Forced Fumbles, 1 Fumbles Recovered, 23 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 3 Stuffs, 7 Stuff Yards, and 0 Kicks Blocked!
+
+Jake McQuaide is a Long Snapper for the Detroit Lions! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Thayer Munford Jr. is a Offensive Tackle for the Las Vegas Raiders! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Josh Myers is a Center for the Green Bay Packers! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Jeff Okudah is a Cornerback for the Houston Texans.
+This year, he recorded 44 Total Tackles, 34 Solo Tackles, 10 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 3 Passes Defensed, 3 Stuffs, 2 Stuff Yards, and 0 Kicks Blocked!
+
+Chris Olave is a Wide Receiver for the New Orleans Saints.
+This year, he recorded 87 Receptions, 138 Receiving Targets, 1123 Receiving Yards, 12.9 Yards Per Reception, 5 Receiving Touchdowns, 51 Yards - Longest Reception, 57 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Nicholas Petit-Frere is a Offensive Tackle for the Tennessee Titans! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Bradley Roby is a Cornerback for the Philadelphia Eagles.
+This year, he recorded 22 Total Tackles, 19 Solo Tackles, 3 Assist Tackles, 0 Sacks, 1 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 1 Stuffs, 6 Stuff Yards, and 0 Kicks Blocked!
+
+Jeremy Ruckert is a Tight End for the New York Jets.
+This year, he recorded 16 Receptions, 22 Receiving Targets, 151 Receiving Yards, 9.4 Yards Per Reception, 0 Receiving Touchdowns, 23 Yards - Longest Reception, 6 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Curtis Samuel is a Wide Receiver for the Washington Commanders.
+This year, he recorded 62 Receptions, 91 Receiving Targets, 613 Receiving Yards, 9.9 Yards Per Reception, 4 Receiving Touchdowns, 37 Yards - Longest Reception, 26 Receiving First Downs, 7 Rushing Attempts, 39 Rushing Yards, 5.6 Yards per Rush Attempt, 1 Rushing Touchdowns, 15 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Trey Sermon is a Running Back for the Indianapolis Colts.
+This year, he recorded 35 Rushing Attempts, 160 Rushing Yards, 4.6 Yards Per Rush Attempt, 0 Rushing Touchdowns, 27 Yards - Longest Rush, 3 Receptions, 13 Receiving Yards, 4.3 Yards Per Reception, 0 Receiving Touchdowns, 7 Yards - Longest Reception, 0 Fumbles, and 0 Fumbles Lost!
+
+Tyreke Smith is a Linebacker for the Arizona Cardinals.
+This year, he recorded 1 Total Tackles, 0 Solo Tackles, 1 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 0 Passes Defensed, 0 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Jaxon Smith-Njigba is a Wide Receiver for the Seattle Seahawks.
+This year, he recorded 63 Receptions, 93 Receiving Targets, 628 Receiving Yards, 10 Yards Per Reception, 4 Receiving Touchdowns, 35 Yards - Longest Reception, 29 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+C.J. Stroud is a Quarterback for the Houston Texans.
+This year, he recorded 319 Completions, 499 Passing Attempts, 4108 Passing Yards, 63.9 Completion Percentage, 8.2 Yards Per Pass Attempt, 23 Passing Touchdowns, 5 Interceptions, 75 Yards - Longest Pass, 38 Times Sacked, 100.8 Passer Rating, 57.5 Adjusted QBR, 39 Rushing Attempts, 167 Rushing Yards, 4.3 Yards Per Rush Attempt, 3 Rushing Touchdowns, and 16 Yards - Longest Rush!
+Michael Thomas is a Wide Receiver for the New Orleans Saints.
+This year, he recorded 39 Receptions, 64 Receiving Targets, 448 Receiving Yards, 11.5 Yards Per Reception, 1 Receiving Touchdowns, 31 Yards - Longest Reception, 21 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Tommy Togiai is a Defensive Tackle for the Atlanta Falcons.
+This year, he recorded 29 Total Tackles, 12 Solo Tackles, 17 Assist Tackles, 1 Sacks, 0 Forced Fumbles, 1 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 2 Passes Defensed, 4 Stuffs, 0 Stuff Yards, and 0 Kicks Blocked!
+
+Nick Vannett is a Tight End for the Los Angeles Chargers.
+This year, he recorded 1 Receptions, 1 Receiving Targets, 3 Receiving Yards, 3 Yards Per Reception, 0 Receiving Touchdowns, 3 Yards - Longest Reception, 1 Receiving First Downs, 0 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 0 Yards - Longest Rush, 0 Fumbles, and 0 Fumbles Lost!
+
+Shaun Wade is a Cornerback for the New England Patriots.
+This year, he recorded 23 Total Tackles, 21 Solo Tackles, 2 Assist Tackles, 0 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 1 Passes Defensed, 2 Stuffs, 6 Stuff Yards, and 0 Kicks Blocked!
+
+Denzel Ward is a Cornerback for the Cleveland Browns.
+This year, he recorded 34 Total Tackles, 30 Solo Tackles, 4 Assist Tackles, 0 Sacks, 1 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 2 Interceptions, 20 Interception Yards, 10 Average Interception Return Yards, 0 Touchdowns, 20 Yards - Longest Interception Return, 11 Passes Defensed, 1 Stuffs, 2 Stuff Yards, and 0 Kicks Blocked!
+
+Pete Werner is a Linebacker for the New Orleans Saints.
+This year, he recorded 93 Total Tackles, 60 Solo Tackles, 33 Assist Tackles, 0.5 Sacks, 0 Forced Fumbles, 2 Fumbles Recovered, 3 Fumble Recovered Yards, 1 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 1 Passes Defensed, 5 Stuffs, 7 Stuff Yards, and 0 Kicks Blocked!
+
+Garrett Wilson is a Wide Receiver for the New York Jets.
+This year, he recorded 95 Receptions, 168 Receiving Targets, 1042 Receiving Yards, 11 Yards Per Reception, 3 Receiving Touchdowns, 68 Yards - Longest Reception, 47 Receiving First Downs, 4 Rushing Attempts, 0 Rushing Yards, 0 Yards per Rush Attempt, 0 Rushing Touchdowns, 6 Yards - Longest Rush, 2 Fumbles, and 2 Fumbles Lost!
+
+Luke Wypler is a Center for the Cleveland Browns! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!
+
+
+Chase Young is a Defensive End for the San Francisco 49ers.
+This year, he recorded 25 Total Tackles, 17 Solo Tackles, 8 Assist Tackles, 7.5 Sacks, 0 Forced Fumbles, 0 Fumbles Recovered, 0 Fumble Recovered Yards, 0 Interceptions, 0 Interception Yards, 0 Average Interception Return Yards, 0 Touchdowns, 0 Yards - Longest Interception Return, 2 Passes Defensed, 2 Stuffs, 5 Stuff Yards, and 0 Kicks Blocked!
+

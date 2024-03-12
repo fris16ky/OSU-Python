@@ -2,6 +2,7 @@ from urllib.request import urlopen
 import requests
 import re
 from bs4 import BeautifulSoup
+import os
 
 #For now, seems like I can't do the NBA without hardcoding it. There's no rhyme or reason to the stats shown on the page I was looking at, and I can't search them up on Google or ESPN
 #Since there's unique IDs. So, might try to figure out a way to work with this current website, or just clean up this code and only do NFL. OR just hardcode it for NBA and keep that separate
@@ -242,19 +243,39 @@ def organizeStats(nums, pos):
         #Same as before; this shouldn't ever execute, but just in case
         return("Cry v2")
 
+file_path = "OSU.txt"
+# Open the file in write mode to wipe its contents
+with open(file_path, "w") as file:
+    pass  # Do nothing, just open and close the file to wipe its contents so it doesn't keep appending
+
 #Print the extracted data
+#This is what will be pasted in the txt file. All of this information here. Everything else (stats, links, moving to next row) is all for logging purposes
 for row in baseCollegeInfo:
     if row["Position"] in defense: 
+        with open(file_path, "a") as file: 
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] in receiver: 
+        with open(file_path, "a") as file: 
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] in oline: 
+        with open(file_path, "a") as file: 
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + "! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!" + "\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + "! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!\nWe know they were GOATED this year tho!")
     elif row["Position"] == "Running Back": 
+        with open(file_path, "a") as file: 
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] == "Punter": 
+        with open(file_path, "a") as file: 
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] == "Quarterback": 
+        with open(file_path, "a") as file: 
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     else: 
         print("Cry but v3")
+
+os.startfile(file_path)
