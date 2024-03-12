@@ -4,25 +4,12 @@ import re
 from bs4 import BeautifulSoup
 import os
 
-#For now, seems like I can't do the NBA without hardcoding it. There's no rhyme or reason to the stats shown on the page I was looking at, and I can't search them up on Google or ESPN
-#Since there's unique IDs. So, might try to figure out a way to work with this current website, or just clean up this code and only do NFL. OR just hardcode it for NBA and keep that separate
-
 #This personal project is my SECOND attempt at Web Scraping
 #The idea is to parse through various websites (mainly ESPN) to gather statistical information on all Ohio State Buckeyes
-#that are playing in the 3 major sports (NFL, NBA, MLB - albeit there are 0 active MLB players, seems like 0 in the NHL too)
-
-#Idea NFL: This code SHOULD Retrieve important information from a website, including the Name, Team, and Position of each player
-#it will ALSO take a hyperlink attached to their name, which directs to their statistics page on ESPN. 
-#The code will then emulate/run that link in order to get the dynamic data of the website, and then pull all important statistical values
-#for each player. This data will be formatted appropriately (i.e. Terry McLaurin had 1,002 receiving yards on 79 receptions and 132 targets. His longest
-# was a catch for 48 yards, received 47 first downs, 4 Touchdowns, and had 0 Rushing Attempts and 0 total fumbles)
-#BUT, this will all be written out in a .txt file that will be saved to the users computer! That way it's a ton cleaner, and I get to learn new stuff. 
-
-#Idea NBA is essentially the same, albeit more and different stats (there are, on average, more important stats in Basketball)
-#I MIGHT include win-loss records too, not sure. But this is pulling data from each players LAST SEASON ONLY - not careers, or best years or anything. Maybe eventually
+#that are playing in the 3 major sports - this is for the NFL. The NBA statistical recordings are more tricky, and there 
+#are 0 active Buckeyes in the MLB and NHL
 
 #We're using Selenium since it'll open it's own Google Chrome tab instead of taking the HTML code from when the site is loaded normally
-#The tags I need (for show names, durations, etc.) are added dynamically, so they're not on the base HTML
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -31,10 +18,9 @@ baseCollegeInfo = [] #this will be the info gathered from the espn.com/nfl/colle
 espnProInfo = [] #info from the hyperlinks in the espn college site
 playerLinks = [] #stores the hyperlinks to visit each players espn stats page
 
-#Starting the Web Scrape process
-#Create a new instance of the Chrome driver
+#Starting the Web Scrape process; Create a new instance of the Chrome driver
 driver = webdriver.Chrome()
-#Navigate to my MyAnimeList page
+#Navigate to the ESPN page
 driver.get("https://www.espn.com/nfl/college/_/letter/o")
 
 #Wait 10 seconds for the page to load
@@ -51,7 +37,7 @@ starting_point = soup.find("tr", string="Ohio State")
 title_row = starting_point.find_next_sibling("tr")
 current_row = title_row.find_next_sibling("tr")
 
-# Iterate through the rows until encountering <tr><td>Oklahoma</td></tr>
+# Iterate through the rows until encountering <tr><td>Oklahoma</td></tr> (aka end of Buckeyes)
 while current_row:
     # Print the contents of current_row for debugging
     # print(current_row)
@@ -71,7 +57,7 @@ while current_row:
     #move to the next row: 
     current_row = current_row.find_next_sibling("tr")
 
-    # Print a message indicating that we're moving to the next row
+    # Print a (logging) message indicating that we're moving to the next row
     print("Moving to next row...")
 
 #Defaulting titles for each position group that has the same exact ESPN stats, for sorting/deciphering later
@@ -79,7 +65,7 @@ defense = ["Cornerback", "Safety", "Defensive End", "Linebacker", "Defensive Tac
 receiver = ["Tight End", "Wide Receiver"]
 oline = ["Offensive Tackle", "Guard", "Center", "Long Snapper"]
 
-#Function to determine if a value is a number (float, int, or number with a comma)
+#Function to determine if a value is a number (covers floats, ints, or numbers with a comma)
 def is_numeric(s):
     try:
         float(s.replace(",", ""))
@@ -87,13 +73,14 @@ def is_numeric(s):
     except ValueError:
         return False
 
-#Getting stats
+#Getting stats for every link
 for link in baseCollegeInfo: 
     driver.get(link["Name_Href"])
     driver.implicitly_wait(10)
     html = driver.page_source
     soup = BeautifulSoup(html, "html.parser")
 
+    #Getting stats for players that do not need advanced/further stats - All Defense, Receivers, Running Back, Punters
     if link["Position"] in defense or link["Position"] in receiver or link["Position"] == "Running Back" or link["Position"] == "Punter": 
         #print("Get stats like normal!")
         # Find the starting point by searching for the first <td> with a numerical value
@@ -120,14 +107,17 @@ for link in baseCollegeInfo:
         # Add the concatenated stats string to the dictionary under the key "Stats"
         link["Stats"] = stats_string.strip()  # Remove trailing space
     elif link["Position"] in oline: 
-        print("No Stats - oline!") #sadge
+        #Oline/Long Snappers do not have stats on ESPN. There are SOME in PFF, but the important ones are pay-walled.
+        print("No Stats - oline!") 
     elif link["Position"] == "Quarterback": 
         #In order to get rushing stats for QBs (+ a few more passing stats), we need to view their full stats, which is at a new/different link. 
         #The difference for this link is that it includes /gamelog/ right after /player, so we need to replace/insert it!
         string_to_insert = "gamelog/"
         insert_index = link["Name_Href"].find("/player/") + len("/player/")
         new_link = link["Name_Href"][:insert_index] + string_to_insert + link["Name_Href"][insert_index:]
-        print(new_link)
+        print(new_link) #logging
+        
+        #Repeat process
         driver.get(new_link)
         driver.implicitly_wait(10)
         html = driver.page_source
@@ -141,16 +131,12 @@ for link in baseCollegeInfo:
             if stats_tds:
                 stats_string = ""
                 for td in stats_tds:
-                    # Check if the content of the <td> element represents a numeric value
                     if td.text.strip().replace(",", "").replace(".", "", 1).isdigit():
-                        # If the content can be converted to a float without loss of precision,
-                        # convert it to a float and then back to string to remove trailing zeros
                         float_value = float(td.text.strip().replace(",", ""))
                         if float_value.is_integer():
                             stats_string += str(int(float_value)) + " "
                         else:
                             stats_string += str(float_value) + " "
-                # Add the concatenated stats string to the dictionary under the key "Stats"
                 link["Stats"] = stats_string.strip()  # Remove trailing space
     else: 
         #There shouldn't be any other position name possible, but in case, handle that
@@ -196,11 +182,9 @@ def organizeStats(nums, pos):
         formatted_sentence = ", ".join(stat_sentences[:-1]) + ", and " + stat_sentences[-1]
         return(formatted_sentence)
     elif pos in oline: 
-        #Stats: No clue LOL - PFF or something?
+        #Stats:
         #Jake McQuaide and Liam McCullough (starting Long Snappers) have 0 stats for Long Snappers - so can't do anything about them. 
-        #Not sure how to do PFF either - they have the stupid ID thing. it's not just pff.com/nfl/players/taylor-decker, there's a /10650 after. 
-        #I suppose I could take the first link after googling "Taylor Decker pff", then click it, then take the Offense Snaps Played, Penalties, Sacks Allowed, and Overall Grade?
-        #But that's a ton of work to not do anything
+        #Returning empty string. pain
         return(nums)
     elif pos == "Running Back": 
         labels = [
@@ -243,8 +227,10 @@ def organizeStats(nums, pos):
         #Same as before; this shouldn't ever execute, but just in case
         return("Cry v2")
 
+#File will be saved under this code folder.
 file_path = "OSU.txt"
-# Open the file in write mode to wipe its contents
+
+# Open the file in write mode to refresh/wipe the contents each time it's run
 with open(file_path, "w") as file:
     pass  # Do nothing, just open and close the file to wipe its contents so it doesn't keep appending
 
@@ -252,8 +238,10 @@ with open(file_path, "w") as file:
 #This is what will be pasted in the txt file. All of this information here. Everything else (stats, links, moving to next row) is all for logging purposes
 for row in baseCollegeInfo:
     if row["Position"] in defense: 
+        #Appending our exact print contents, but add extra spaces for readability. 
         with open(file_path, "a") as file: 
             file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
+        #Logging purposes
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
     elif row["Position"] in receiver: 
         with open(file_path, "a") as file: 
@@ -278,4 +266,5 @@ for row in baseCollegeInfo:
     else: 
         print("Cry but v3")
 
+#This will open the file on your computer automatically after the code is finished running.
 os.startfile(file_path)

@@ -1,5 +1,8 @@
 #Keeping the NBA code separate so that I can work on them both. Get football working first, then deal with the NBA!
 
+#For now, seems like I can't do the NBA without hardcoding it. There's no rhyme or reason to the stats shown on the page I was looking at, and I can't search them up on Google or ESPN
+#Since there's unique IDs. So, might try to figure out a way to work with this current website, or just clean up this code and only do NFL. OR just hardcode it for NBA and keep that separate
+
 #Here's my code from what I briefly worked on in the main file
 from urllib.request import urlopen
 import requests
