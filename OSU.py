@@ -63,7 +63,7 @@ while current_row:
     current_row = current_row.find_next_sibling("tr")
 
     # Print a (logging) message indicating that we're moving to the next row
-    print(fullName + " " + name_Href)
+    print("Proceeding to the next row...")
 
 
 #Defaulting titles for each position group that has the same exact ESPN stats, for sorting/deciphering later
@@ -79,15 +79,36 @@ def is_numeric(s):
     except ValueError:
         return False
 
+def get_pff_stat(soup, stat_name):
+    """Helper function to get a PFF stat value by its name"""
+    stat_div = soup.find("div", 
+        {"class": "css-146c3p1", "data-testid": "tweedui.StatCard.label"}, 
+        string=lambda x: x and stat_name in x.upper())
+    
+    if stat_div:
+        value_div = stat_div.find_next("div", {"class": "css-146c3p1"})
+        if value_div:
+            return value_div.text.strip()
+    
+    print(f"{stat_name} not found")  # Debug print
+    return ""
+
+# Define the stats we want to collect
+pff_stats = [
+    "OVERALL GRADE",
+    "PASS BLOCKING GRADE",
+    "RUN BLOCKING GRADE",
+    "OFFENSE SNAPS PLAYED",
+    "PENALTIES",
+    "SACKS ALLOWED"
+]
+
 #Getting stats for every link
 for link in baseCollegeInfo: 
     driver.get(link["Name_Href"])
     driver.implicitly_wait(10)
     html = driver.page_source
     soup = BeautifulSoup(html, "html.parser")
-
-    if fullName == "Dre'Mont Jones": 
-        link["name_Href"] = link["name_Href"].replace("dre", "dre'mont-jones")
 
     #Getting stats for players that do not need advanced/further stats - All Defense, Receivers, Running Back, Punters
     if link["Position"] in defense or link["Position"] in receiver or link["Position"] == "Running Back" or link["Position"] == "Punter": 
@@ -116,8 +137,9 @@ for link in baseCollegeInfo:
         # Add the concatenated stats string to the dictionary under the key "Stats"
         link["Stats"] = stats_string.strip()  # Remove trailing space
     elif link["Position"] in oline: 
-        #Oline/Long Snappers do not have stats on ESPN. There are SOME in PFF, but the important ones are pay-walled.
-        #using PFF now - 
+        #Reset stats string each iteration
+        stats_string = ""
+
         pffName = link["Name"].replace(" ", "+")
         #now search PFF to that name
         pffStart = pffBase + pffName
@@ -133,23 +155,14 @@ for link in baseCollegeInfo:
         html = driver.page_source
         soup = BeautifulSoup(html, "html.parser")
         
-        # Find the div containing "Overall Grade"
-        overall_grade_div = soup.find("div", string="Overall Grade")
-        if overall_grade_div:
-            # Find the div containing the numerical value (3 divs after)
-            grade_value_div = overall_grade_div.find_next_siblings("div", limit=3)[-1]
-            if grade_value_div:
-                link["Stats"] = grade_value_div.text.strip()
-        
-        #Now, which stats do we want. Overall Grade, Pass Blocking Grade, Run Blocking Grade, Offensive Snaps, Penalties, Sacks Allowed.
-        #Looks like they're all in divs. On the 3rd div down from the name (Overall Grade, Penalties, etc.), that's where the values are. 
-        
-        # pff_row = soup.find("a", string=fullName)
-        # pff_Href = pff_row.find("a")["href"]
+        # Collect all stats in one loop
+        stats_string = ""
+        for stat in pff_stats:
+            value = get_pff_stat(soup, stat)
+            if value:
+                stats_string += value + " "
 
-        #Current bug - it's using the name of the last name. So, ChaseYoung every time. Need to fix that, similar to what works above? idfk
-
-        print(pffLink)
+        link["Stats"] = stats_string.strip()
     elif link["Position"] == "Quarterback": 
         #In order to get rushing stats for QBs (+ a few more passing stats), we need to view their full stats, which is at a new/different link. 
         #The difference for this link is that it includes /gamelog/ right after /player, so we need to replace/insert it!
@@ -181,7 +194,7 @@ for link in baseCollegeInfo:
                 link["Stats"] = stats_string.strip()  # Remove trailing space
     else: 
         #There shouldn't be any other position name possible, but in case, handle that
-        print("Cry")
+        print("Cry - probably is a LongSnapper (no stats, not even PFF)")
     #Printing out the link + the stat values as numbers for logging
     print(link["Name_Href"])
     print(link["Stats"])
@@ -194,7 +207,7 @@ def organizeStats(stats, position):
     stat_sentences = []
     
     # Debug print
-    print(f"Processing stats for {position}: {stats}")
+    #print(f"Processing stats for {position}: {stats}")
     
     if position in defense:
         labels = [
@@ -212,7 +225,9 @@ def organizeStats(stats, position):
             "Rushing Touchdowns", "Yards - Longest Rush", "Fumbles", "Fumbles Lost!"
         ]
     elif position in oline:
-        return "no recorded stats for this position"
+        labels = [
+            "Overall Grade", "Pass Blocking Grade", "Run Blocking Grade", "Snaps Played", "Penalties", "Sacks Allowed"
+        ]
     elif position == "Running Back":
         labels = [
             "Rushing Attempts", "Rushing Yards", "Yards Per Rush Attempt", "Rushing Touchdowns", 
@@ -238,11 +253,21 @@ def organizeStats(stats, position):
     # Process stats for all positions (except oline which returns early)
     if stats:  # Check if stats is not empty
         num_values = stats.split()
-        stat_sentences = [f"{value} {label}" for value, label in zip(num_values, labels)]
+        # Only create stat sentences for non-zero values
+        stat_sentences = []
+        for value, label in zip(num_values, labels):
+            # Convert value to float to handle both integers and decimals
+            try:
+                float_val = float(value)
+                if float_val != 0:  # Only add stats that aren't zero
+                    stat_sentences.append(f"{value} {label}")
+            except ValueError:
+                # If value can't be converted to float, include it anyway
+                stat_sentences.append(f"{value} {label}")
 
     # Universal safety check for all positions
     if not stat_sentences:
-        return "no recorded stats for this season"
+        return "No recorded stats for this season :("
     elif len(stat_sentences) == 1:
         return stat_sentences[0]
     else:
@@ -255,37 +280,46 @@ file_path = "OSU.txt"
 with open(file_path, "w") as file:
     pass  # Do nothing, just open and close the file to wipe its contents so it doesn't keep appending
 
+
 #Print the extracted data
 #This is what will be pasted in the txt file. All of this information here. Everything else (stats, links, moving to next row) is all for logging purposes
 for row in baseCollegeInfo:
     if row["Position"] in defense: 
         #Appending our exact print contents, but add extra spaces for readability. 
         with open(file_path, "a") as file: 
-            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
         #Logging purposes
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".")
     elif row["Position"] in receiver: 
         with open(file_path, "a") as file: 
-            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".")
     elif row["Position"] in oline: 
-        with open(file_path, "a") as file: 
-            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + "! Sadly, ESPN doesn't record stats, and PFF hides theirs behind a subscription!\nWe know they were GOATED this year tho!")
+        #For grammar's sake
+        if row["Position"] == "Offensive Tackle": 
+            with open(file_path, "a") as file: 
+                file.write(row["Name"] + " is an " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
+            print(row["Name"] + " is an " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded a " + organizeStats(row["Stats"], row["Position"]) + ".")
+        else : 
+            with open(file_path, "a") as file: 
+                file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
+            print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded a " + organizeStats(row["Stats"], row["Position"]) + ".")
     elif row["Position"] == "Running Back": 
         with open(file_path, "a") as file: 
-            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".")
     elif row["Position"] == "Punter": 
         with open(file_path, "a") as file: 
-            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".")
     elif row["Position"] == "Quarterback": 
         with open(file_path, "a") as file: 
-            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]) + "\n" + "\n")
-        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year, he recorded " + organizeStats(row["Stats"], row["Position"]))
+            file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
+        print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".")
     else: 
         print("Cry but v3")
 
 #This will open the file on your computer automatically after the code is finished running.
 os.startfile(file_path)
+
+
