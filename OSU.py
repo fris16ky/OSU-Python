@@ -1,9 +1,5 @@
-from urllib.request import urlopen
-import requests
-import re
 from bs4 import BeautifulSoup
 import os
-from urllib.parse import unquote
 
 #This personal project is my SECOND attempt at Web Scraping
 #The idea is to parse through various websites (mainly ESPN) to gather statistical information on all Ohio State Buckeyes
