@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import os
 
 #This personal project is my SECOND attempt at Web Scraping
-#The idea is to parse through various websites (mainly ESPN) to gather statistical information on all Ohio State Buckeyes
+#The idea is to parse through various websites (mainly ESPN and PFF) to gather statistical information on all Ohio State Buckeyes
 #that are playing in the 3 major sports - this is for the NFL. The NBA statistical recordings are more tricky, and there 
 #are 0 active Buckeyes in the MLB and NHL
 
@@ -19,7 +19,7 @@ playerLinks = [] #stores the hyperlinks to visit each players espn stats page
 driver = webdriver.Chrome()
 #Navigate to the ESPN page
 driver.get("https://www.espn.com/nfl/college/_/letter/o")
-pffBase = "https://www.pff.com/search?q="
+pffBase = "https://www.pff.com/search?q=" #Base link for PFF
 
 #Wait 10 seconds for the page to load
 driver.implicitly_wait(10)
@@ -37,9 +37,6 @@ current_row = title_row.find_next_sibling("tr")
 
 # Iterate through the rows until encountering <tr><td>Oklahoma</td></tr> (aka end of Buckeyes)
 while current_row:
-    # Print the contents of current_row for debugging
-    # print(current_row)
-
     # Check if the current row contains the ending point
     if current_row.find("td").text == "Oklahoma":
         break
@@ -49,8 +46,7 @@ while current_row:
     teamName = current_row.find_all("a")[1].text.strip()
     name_Href = current_row.find("a").get("href", "")
     name_Href = name_Href.replace("'", "-")
-    #the link would end up ending at dre (thinking "'mont Jones" was extra due to the apostrophe)
-    #erroring out for dre'mont jones - needs to deal with hyphens
+    #dealing with special case of hyphens in a name (Dre'Mont Jones), which caused string issues. The link works for both "dre-mont-jones" and "dre'mont-jones"!
     position = current_row.find_all("td")[2].text.strip()
     #finding the first and 2nd anchor tags, taking the href for the player, position of the third td tag
     baseCollegeInfo.append({"Name": fullName,"Name_Href": name_Href, "Team": teamName, "Position": position, "Stats": ""})
@@ -65,7 +61,8 @@ while current_row:
 #Defaulting titles for each position group that has the same exact ESPN stats, for sorting/deciphering later
 defense = ["Cornerback", "Safety", "Defensive End", "Linebacker", "Defensive Tackle"]
 receiver = ["Tight End", "Wide Receiver"]
-oline = ["Offensive Tackle", "Guard", "Center"] #Had to remove Long Snappers, since they ruin the PFF code - they don't have any grades or anything
+oline = ["Offensive Tackle", "Guard", "Center"] 
+#Had to remove Long Snappers, since they ruin the PFF code - they don't have any grades or anything, not even snaps
 
 #Function to determine if a value is a number (covers floats, ints, or numbers with a comma)
 def is_numeric(s):
@@ -75,6 +72,7 @@ def is_numeric(s):
     except ValueError:
         return False
 
+#Helper function for PFF stats - all of the divs holding the stat strings are the same, and the divs holding the stat values also have the same class
 def get_pff_stat(soup, stat_name):
     """Helper function to get a PFF stat value by its name"""
     stat_div = soup.find("div", 
@@ -84,12 +82,12 @@ def get_pff_stat(soup, stat_name):
     if stat_div:
         value_div = stat_div.find_next("div", {"class": "css-146c3p1"})
         if value_div:
-            return value_div.text.strip()
+            return value_div.text.strip() #This is the (double) stat value (i.e. 77.0)
     
     print(f"{stat_name} not found")  # Debug print
     return ""
 
-# Define the stats we want to collect
+# PFF array of stats we want to collect. Note that, in the website, the last 3 have year values (i.e. PENALTIES 2024), but that doesn't matter for the code
 pff_stats = [
     "OVERALL GRADE",
     "PASS BLOCKING GRADE",
@@ -133,25 +131,31 @@ for link in baseCollegeInfo:
         # Add the concatenated stats string to the dictionary under the key "Stats"
         link["Stats"] = stats_string.strip()  # Remove trailing space
     elif link["Position"] in oline: 
+        #We finally have oline stats!
         #Reset stats string each iteration
         stats_string = ""
 
+        #For the PFF links, both "https://www.pff.com/search?q=jonah+jackson" and "https://www.pff.com/search?q=jonah+jackson#gsc.tab=0&gsc.q=jonah%20jackson&gsc.page=1"
+        #return the same thing (the landing page we want)
         pffName = link["Name"].replace(" ", "+")
         #now search PFF to that name
         pffStart = pffBase + pffName
 
+        #Start a new driver instance for PFF
         driver.get(pffStart) #but, we then need to click on the first link of that name
         driver.implicitly_wait(10)
         html = driver.page_source
         soup = BeautifulSoup(html, "html.parser")
         
+        #When you get to the page of the player, the first row is the player, which has their exact PFF link (with their unique ID) right underneath it
+        #Find + retrieve that link, and then start another driver instance for that link
         pffLink = soup.find("p", string=lambda text: text and text.startswith("https://www.pff.com/nfl/")).text
         driver.get(pffLink)
         driver.implicitly_wait(10)
         html = driver.page_source
         soup = BeautifulSoup(html, "html.parser")
         
-        # Collect all stats in one loop
+        # Collect all stats in one loop using our helper function
         stats_string = ""
         for stat in pff_stats:
             value = get_pff_stat(soup, stat)
@@ -249,7 +253,8 @@ def organizeStats(stats, position):
     # Process stats for all positions (except oline which returns early)
     if stats:  # Check if stats is not empty
         num_values = stats.split()
-        # Only create stat sentences for non-zero values
+        
+        # Only create stat sentences for non-zero values - for readability, and it just makes sense to remove 0s
         stat_sentences = []
         for value, label in zip(num_values, labels):
             # Convert value to float to handle both integers and decimals
@@ -263,7 +268,7 @@ def organizeStats(stats, position):
 
     # Universal safety check for all positions
     if not stat_sentences:
-        return "No recorded stats for this season :("
+        return "no stats :("
     elif len(stat_sentences) == 1:
         return stat_sentences[0]
     else:
@@ -291,7 +296,7 @@ for row in baseCollegeInfo:
             file.write(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
         print(row["Name"] + " is a " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".")
     elif row["Position"] in oline: 
-        #For grammar's sake
+        #For grammar's sake - using "an" instead of "a" for the only position that starts with a vowel
         if row["Position"] == "Offensive Tackle": 
             with open(file_path, "a") as file: 
                 file.write(row["Name"] + " is an " + row["Position"] + " for the " + row["Team"] + ".\nThis year he recorded " + organizeStats(row["Stats"], row["Position"]) + ".\n" + "\n")
@@ -315,7 +320,5 @@ for row in baseCollegeInfo:
     else: 
         print("Cry but v3")
 
-#This will open the file on your computer automatically after the code is finished running.
+#This will open the file on your computer automatically after the code is finished running. (Should be in NotePad)
 os.startfile(file_path)
-
-
